@@ -35,7 +35,7 @@ This codebase strictly enforces the verbose, explicit boilerplate required acros
 
 All architectural rules and style invariants are governed by the central constitution:
 
-- **[preferences.md](https://github.com/vexgraph-dev/vexspoke/blob/main/preferences.md)** (tracked in `vexspoke`, accessible locally at `../../../preferences.md`)
+- **[preferences.md](https://github.com/vexgraph-ecosystem/vexspoke/blob/main/preferences.md)** (tracked in `vexspoke`, accessible locally at `../../../preferences.md`)
 - **[language-preferences.md](language-preferences.md)** (repo-local mirror binding language)
 
 Whenever preferences or conventions evolve, `../../../preferences.md` and `language-preferences.md` are updated and committed locally in the same cycle (the Living Preferences Law / Zero Drift).
