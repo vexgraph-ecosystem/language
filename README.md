@@ -20,17 +20,22 @@ Each grammar ships as a hot-swappable dylib loaded through `hotcwap` R1 —
 adding a language never rebuilds the IDE, it drops in a module.
 
 ## Depends on (Vertical Integration Law allowlist)
-`vexspoke` only (`+ graphvex` for GPU-backed highlighting). Never engines,
-never `darling`/`api-haven` headers.
+R3 may borrow either R2 public contract: Vexspoke CPU computation/behavior or
+Relational Engine memory/storage, stable rows, variable bindings and native C
+search over Rust-owned spans (`+ graphvex` for GPU-backed highlighting). Never
+R1/R4/R5 or `api-haven` headers. This blueprint has no implemented engine
+integration. Migration is staged; Vexspoke's existing memory/container ABI and
+default allocator remain. R1 owns lifetimes/residency; no C/Rust atomic-layout
+compatibility or automatic schema migration is assumed. GPU dispatch stays R3.
 
 ## Layout
 - Grammars (future): one directory per language, each building its own dylib.
-- Tests: the shared `tests/` repo will host a `tests/language/` partition
+- Tests: the shared `../../../tests` repo will host a `tests/language/` partition
   (mirrored per unit, the Test Tree Mirror Law); no test file lives inside this
   repo's source directories (the Test Segregation Law).
 
 ## Laws that govern work here
-- Constitution: the universal [`preferences.md`](../../vexspoke/preferences.md) (canonical file at `ecosystem/vexspoke/preferences.md`; the workspace root links to it).
+- Constitution: the [canonical preferences.md Gist](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a); one real, Git-ignored workspace-root `../../../preferences.md`, not a Vexspoke file or symlink.
 - Commits land in THIS repo root, one cohesive unit each; never push unless asked.
 - One public class per `.h`/`.c` pair, `(*ptr).field` (never `->`), dest-last
   params, `-Wall -Wextra -Werror`.
