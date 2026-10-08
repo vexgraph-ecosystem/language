@@ -11,8 +11,20 @@ wired into it. IDE appearance is user-verified.
 Future builds belong to [b](https://github.com/vex-graph/b). No runnable grammar
 target or standalone runtime build is claimed by this metadata entry.
 
-**Role:** R3 Driver — syntax backends for the ecosystem (used by `semicolon`).
-**Status:** stub (LICENSE only; contract defined, no grammars yet).
+## Current State
+
+**Role:** R3 driver — syntax backends for the ecosystem (used by `semicolon`).
+
+**Implemented and proven:** nothing. This is a **source-free blueprint**: the
+repository holds only `README.md`, `CONTRIBUTING.md`, `LICENSE`,
+`language-preferences.md`, `.gitignore` and an IDE-only `LANGUAGES NONE`
+`CMakeLists.txt`. There is no `src/`, header, grammar dylib or test.
+
+**Specified only:** the `Language` contract (`Lang_tokenize/parse/highlight/…`),
+the hot-swappable grammar-module ABI, the tokenizer, relational AST, highlighter,
+scope resolver, formatter, LSP bridge and the ~30 grammars.
+
+**Platforms proven:** none (no build, no binary).
 
 ## What it is
 `language` owns the `Language` contract (`Lang_tokenize/parse/highlight/...`).
@@ -39,3 +51,16 @@ compatibility or automatic schema migration is assumed. GPU dispatch stays R3.
 - Commits land in THIS repo root, one cohesive unit each; never push unless asked.
 - One public class per `.h`/`.c` pair, `(*ptr).field` (never `->`), dest-last
   params, `-Wall -Wextra -Werror`.
+
+## Scope and Limitations
+
+**Scope (intended):** R3 language support — per-grammar hot-swappable dylibs and
+the tokenizer/AST/highlighter/LSP surface consumed by `semicolon`.
+
+**Deliberately not covered:** no engine integration today; it never includes
+R1/R4/R5 or `api-haven` headers; the allocator and IO remain R2 (Relational Engine).
+
+**Known limits and gaps:** zero implementation — every contract above is
+specification only, with no platform proven and no `tests/language/` partition.
+Interface spellings disagree across the repo's own docs (`Lang_*` vs `Grammar_*`
+vs a `LangDriver` vtable); no source exists to arbitrate, so none is canonical.
