@@ -1,15 +1,7 @@
 # language — R3 grammar & LSP driver provider
 
-## CLion: CMake is IDE metadata only
-
-Open this repository root as a CMake project. `CMakeLists.txt` is an IDE-only
-blueprint entry: there are no production sources or C23 source targets yet,
-so there is nothing to provide semantic diagnostics or inlay hints for.
-No fake declarations, dependency downloads, linking or application runner are
-wired into it. IDE appearance is user-verified.
-
 Future builds belong to [b](https://github.com/vex-graph/b). No runnable grammar
-target or standalone runtime build is claimed by this metadata entry.
+target exists yet.
 
 ## Current State
 
@@ -17,8 +9,8 @@ target or standalone runtime build is claimed by this metadata entry.
 
 **Implemented and proven:** nothing. This is a **source-free blueprint**: the
 repository holds only `README.md`, `CONTRIBUTING.md`, `LICENSE`,
-`language-preferences.md`, `.gitignore` and an IDE-only `LANGUAGES NONE`
-`CMakeLists.txt`. There is no `src/`, header, grammar dylib or test.
+`language-preferences.md` and `.gitignore`. There is no `src/`, header, grammar
+dylib or test.
 
 **Specified only:** the `Language` contract (`Lang_tokenize/parse/highlight/…`),
 the hot-swappable grammar-module ABI, the tokenizer, relational AST, highlighter,
