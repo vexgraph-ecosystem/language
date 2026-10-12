@@ -7,16 +7,25 @@ target exists yet.
 
 **Role:** R3 driver — syntax backends for the ecosystem (used by `semicolon`).
 
-**Implemented and proven:** nothing. This is a **source-free blueprint**: the
-repository holds only `README.md`, `CONTRIBUTING.md`, `LICENSE`,
-`language-preferences.md` and `.gitignore`. There is no `src/`, header, grammar
-dylib or test.
+**Implemented:** initial value-object scaffolding exists for source ranges,
+tokens, symbols and references (`document/source_range.*`, `token/token.*`,
+`semantic/symbol.*`, `semantic/reference.*`). A small unified-diff adapter
+classifies patch lines for structural highlighting. The value records are
+borrowed/value-only; the adapter does not lex changed source text. Neither slice
+provides programming-language parsing, symbol resolution, project indexing, or
+LSP services.
 
-**Specified only:** the `Language` contract (`Lang_tokenize/parse/highlight/…`),
-the hot-swappable grammar-module ABI, the tokenizer, relational AST, highlighter,
-scope resolver, formatter, LSP bridge and the ~30 grammars.
+**Still a blueprint:** no grammar adapter, document store, syntax tree, semantic
+resolver, project index, LSP transport or hot-swappable grammar dylib exists.
+No runnable repository build target is registered yet.
 
-**Platforms proven:** none (no build, no binary).
+**Verification performed:** on Apple Silicon macOS, five owner tests compile
+with GNU C23 and `-Wall -Wextra -Werror`, both normally and with ASan/UBSan.
+This is scoped object/diff-classifier evidence only, not platform/runtime
+integration proof.
+
+**Platforms proven for language services:** none. The diff classifier is a local
+offline parsing helper only, not a complete language service.
 
 ## What it is
 `language` owns the `Language` contract (`Lang_tokenize/parse/highlight/...`).
@@ -33,10 +42,16 @@ default allocator remain. R1 owns lifetimes/residency; no C/Rust atomic-layout
 compatibility or automatic schema migration is assumed. GPU dispatch stays R3.
 
 ## Layout
-- Grammars (future): one directory per language, each building its own dylib.
-- Tests: the shared `../../../tests` repo will host a `tests/language/` partition
-  (mirrored per unit, the Test Tree Mirror Law); no test file lives inside this
-  repo's source directories (the Test Segregation Law).
+- `document/`: shared source byte-range value (`SourceRange`).
+- `token/`: shared lexical token kind/range value (`Token`).
+- `semantic/`: shared symbol identity/kinds (`Symbol`) and use-site
+  relationship (`Reference`). Function, class, variable, macro, label and type
+  aliases are currently `SymbolKind` variants, not separate classes; global
+  declarations use the global scope identity chosen by a future index.
+- `adapters/<language>/`: language-specific frontends. `adapters/diff/` contains
+  the unified-diff line classifier; `adapters/c/` remains a reservation only.
+- `tests/language/`: mirrored owner tests and `run.py`; checklist evidence is
+  being recorded separately for these Language tests.
 
 ## Laws that govern work here
 - Constitution: the [canonical preferences.md Gist](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a); one real, Git-ignored workspace-root `../../../preferences.md`, not a Vexspoke file or symlink.
@@ -52,7 +67,10 @@ the tokenizer/AST/highlighter/LSP surface consumed by `semicolon`.
 **Deliberately not covered:** no engine integration today; it never includes
 R1/R4/R5 or `api-haven` headers; the allocator and IO remain R2 (Relational Engine).
 
-**Known limits and gaps:** zero implementation — every contract above is
-specification only, with no platform proven and no `tests/language/` partition.
-Interface spellings disagree across the repo's own docs (`Lang_*` vs `Grammar_*`
-vs a `LangDriver` vtable); no source exists to arbitrate, so none is canonical.
+**Known limits and gaps:** owner tests are strict C23 local tests, not yet an
+umbrella build target. Diff support only classifies unified Git patch line roles;
+there is no changed-code lexer integration, full patch model, syntax/semantic
+analysis, color theme/rendering, inlay hints, project-wide usages, LSP transport,
+consumer integration, or non-macOS platform proof. Earlier blueprint docs still
+disagree on the grammar-module ABI (`Lang_*` vs `Grammar_*` vs `LangDriver`);
+these objects do not settle that dispute.
