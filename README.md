@@ -42,19 +42,19 @@ default allocator remain. R1 owns lifetimes/residency; no C/Rust atomic-layout
 compatibility or automatic schema migration is assumed. GPU dispatch stays R3.
 
 ## Layout
-- `document/`: shared source byte-range value (`SourceRange`).
-- `token/`: shared lexical token kind/range value (`Token`).
-- `semantic/`: shared symbol identity/kinds (`Symbol`) and use-site
+- `document`: shared source byte-range value (`SourceRange`).
+- `token`: shared lexical token kind/range value (`Token`).
+- `semantic`: shared symbol identity/kinds (`Symbol`) and use-site
   relationship (`Reference`). Function, class, variable, macro, label and type
   aliases are currently `SymbolKind` variants, not separate classes; global
   declarations use the global scope identity chosen by a future index.
-- `adapters/<language>/`: language-specific frontends. `adapters/diff/` contains
-  the unified-diff line classifier; `adapters/c/` remains a reservation only.
-- `tests/language/`: mirrored owner tests and `run.py`; checklist evidence is
+- `adapters/<language>/`: language-specific frontends. `adapters/diff` contains
+  the unified-diff line classifier; `adapters/c` remains a reservation only.
+- `../../tests/language`: mirrored owner tests and `run.py`; checklist evidence is
   being recorded separately for these Language tests.
 
 ## Laws that govern work here
-- Constitution: the [canonical preferences.md Gist](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a); one real, Git-ignored workspace-root `../../../preferences.md`, not a Vexspoke file or symlink.
+- Constitution: the [canonical preferences.md Gist](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a); one real, Git-ignored workspace `../../gist/PREFERENCES.md`, not a Vexspoke file or symlink.
 - Commits land in THIS repo root, one cohesive unit each; never push unless asked.
 - One public class per `.h`/`.c` pair, `(*ptr).field` (never `->`), dest-last
   params, `-Wall -Wextra -Werror`.

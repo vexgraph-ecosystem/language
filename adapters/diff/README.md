@@ -9,4 +9,4 @@ This is structural patch highlighting only. Added and removed source text is not
 lexed by the embedded programming-language adapter yet. Combined diffs, binary
 payload interpretation, word-level change ranges, line-number mapping, and
 consumer/UI color integration are not implemented. See the owner at
-`tests/language/adapters/diff/diff_adapter_test.c`.
+`../../../../tests/language/adapters/diff/diff_adapter_test.c`.
