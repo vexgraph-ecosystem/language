@@ -20,7 +20,7 @@ SourceRange SourceRange_1(uint32_t documentId);
 SourceRange SourceRange_3(uint32_t documentId, uint64_t startByte, uint64_t endByte);
 // Dispatch the supported arities: SourceRange(), SourceRange(documentId), or
 // SourceRange(documentId, startByte, endByte). Other arities are compile errors.
-#define SourceRange(...) SOURCE_RANGE_SELECT(_, ##__VA_ARGS__, SourceRange_3, SourceRange_invalid_arity, SourceRange_1, SourceRange_0)(__VA_ARGS__)
+#define SourceRange(...) SOURCE_RANGE_SELECT(_ __VA_OPT__(,) __VA_ARGS__, SourceRange_3, SourceRange_invalid_arity, SourceRange_1, SourceRange_0)(__VA_ARGS__)
 #define SOURCE_RANGE_SELECT(_0, _1, _2, _3, NAME, ...) NAME
 // Return the all-zero identity. Validity requires nonzero documentId and
 // startByte <= endByte; setters do not maintain this cross-field invariant.

@@ -27,7 +27,7 @@ Token Token_0(void);
 Token Token_1(TokenKind kind);
 Token Token_2(TokenKind kind, SourceRange range);
 // Dispatch Token(), Token(kind), or Token(kind, range); other arities reject.
-#define Token(...) TOKEN_SELECT(_, ##__VA_ARGS__, Token_2, Token_1, Token_0)(__VA_ARGS__)
+#define Token(...) TOKEN_SELECT(_ __VA_OPT__(,) __VA_ARGS__, Token_2, Token_1, Token_0)(__VA_ARGS__)
 #define TOKEN_SELECT(_0, _1, _2, NAME, ...) NAME
 // Return the empty/unknown token identity.
 Token Token_zero(void);

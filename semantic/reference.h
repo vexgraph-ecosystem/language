@@ -29,7 +29,7 @@ Reference Reference_1(uint64_t targetSymbolId);
 Reference Reference_4(uint64_t targetSymbolId, SourceRange range, ReferenceRole role, bool resolved);
 // Dispatch Reference(), Reference(targetSymbolId), or the four-field form;
 // other arities reject at compile time.
-#define Reference(...) REFERENCE_SELECT(_, ##__VA_ARGS__, Reference_4, Reference_invalid_arity, Reference_invalid_arity, Reference_1, Reference_0)(__VA_ARGS__)
+#define Reference(...) REFERENCE_SELECT(_ __VA_OPT__(,) __VA_ARGS__, Reference_4, Reference_invalid_arity, Reference_invalid_arity, Reference_1, Reference_0)(__VA_ARGS__)
 #define REFERENCE_SELECT(_0, _1, _2, _3, _4, NAME, ...) NAME
 // Return the empty identity and provide symmetric field accessors. Null
 // getters return safe defaults; null setters do nothing.

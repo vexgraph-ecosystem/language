@@ -33,7 +33,7 @@ Symbol Symbol_1(uint64_t id);
 Symbol Symbol_5(uint64_t id, uint64_t scopeId, SymbolKind kind, const char *name, SourceRange declarationRange);
 // Dispatch Symbol(), Symbol(id), or the five-field constructor; other arities
 // reject at compile time.
-#define Symbol(...) SYMBOL_SELECT(_, ##__VA_ARGS__, Symbol_5, Symbol_invalid_arity, Symbol_invalid_arity, Symbol_invalid_arity, Symbol_1, Symbol_0)(__VA_ARGS__)
+#define Symbol(...) SYMBOL_SELECT(_ __VA_OPT__(,) __VA_ARGS__, Symbol_5, Symbol_invalid_arity, Symbol_invalid_arity, Symbol_invalid_arity, Symbol_1, Symbol_0)(__VA_ARGS__)
 #define SYMBOL_SELECT(_0, _1, _2, _3, _4, _5, NAME, ...) NAME
 // Return the all-zero identity and provide symmetric field accessors. Null
 // getters return safe defaults; null setters do nothing.
