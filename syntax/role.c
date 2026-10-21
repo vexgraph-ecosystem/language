@@ -21,7 +21,7 @@
  * ============================================================================
  * MODULE: SyntaxRole (syntax/role.c)
  * VOCABULARY (Mirroring syntax/role.h)
- *   enum SyntaxRole  // NONE, then one entry per shared role through INVALID
+ *   enum SyntaxRole  // NONE, shared roles, INVALID, then valid IDENTIFIER
  *
  * PRIVATE DATA
  *   ROLE_NAMES[]  // stable spelling per role, indexed by SyntaxRole
@@ -35,8 +35,9 @@
  * CONTRACT
  *   The two arrays must have exactly one row per enum value. NONE is not a
  *   valid classification but has a spelling and a "text" key. INVALID is a real
- *   role (a span the adapter could not classify) and is valid; an out-of-range
- *   number is not. No function allocates or retains a pointer.
+ *   role (a span the adapter could not classify) and is valid; IDENTIFIER is
+ *   also valid and maps to the core "text" style key. An out-of-range number is
+ *   not valid. No function allocates or retains a pointer.
  * ============================================================================
  */
 
@@ -48,7 +49,8 @@ static const char *ROLE_NAMES[] = {
     "attribute", "directive", "string", "string.escape", "string.interpolation",
     "regex", "character", "number", "boolean", "null", "operator", "operator.pointer",
     "operator.cast-pointer", "operator.deref", "operator.address", "member",
-    "punctuation", "bracket", "comment", "comment.doc", "inactive", "invalid"
+    "punctuation", "bracket", "comment", "comment.doc", "inactive", "invalid",
+    "identifier"
 };
 
 static const char *ROLE_KEYS[] = {
@@ -59,7 +61,7 @@ static const char *ROLE_KEYS[] = {
     "string.escape", "string.interpolation", "string.regex", "character", "number",
     "boolean", "null", "operator", "operator.pointer", "operator.cast-pointer",
     "operator.deref", "operator.address", "member", "punctuation", "bracket", "comment",
-    "comment.doc", "inactive", "invalid"
+    "comment.doc", "inactive", "invalid", "text"
 };
 
 const char *SyntaxRole_name(SyntaxRole role) {

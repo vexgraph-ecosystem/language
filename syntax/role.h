@@ -56,7 +56,8 @@ typedef enum SyntaxRole {
     SYNTAX_ROLE_COMMENT,
     SYNTAX_ROLE_DOC_COMMENT,
     SYNTAX_ROLE_INACTIVE,
-    SYNTAX_ROLE_INVALID
+    SYNTAX_ROLE_INVALID,
+    SYNTAX_ROLE_IDENTIFIER
 } SyntaxRole;
 
 // Stable spelling of the enum value (for projections and diagnostics).
