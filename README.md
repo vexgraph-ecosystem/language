@@ -22,7 +22,7 @@ underline/squiggle/strike decorations; `StyleKeyRegistry` joins shared style
 keys and language-prefixed adapter keys through one bounded fallback; and
 `SyntaxRole`, `SyntaxSpan`, and `Diagnostic` provide language-neutral outputs
 for adapters and hosts. The C corpus at
-`../../tests/language/adapters/c/corpus.c` records the intended cases (`*` as
+`../../../tests/language/adapters/c/corpus.c` records the intended cases (`*` as
 multiply/dereference/declarator, macro object/function/generic claims,
 `;;` claims versus empty statements, and documentation comments), but no C
 lexer or parser consumes it yet.
@@ -62,11 +62,11 @@ compatibility or automatic schema migration is assumed. GPU dispatch stays R3.
   declarations use the global scope identity chosen by a future index.
 - `adapters/<language>/`: language-specific frontends. `adapters/diff` contains
   the unified-diff line classifier; `adapters/c` remains a reservation only.
-- `../../tests/language`: mirrored owner tests and `run.py`; checklist evidence is
+- `../../../tests/language`: mirrored owner tests and `run.py`; checklist evidence is
   being recorded separately for these Language tests.
 
 ## Laws that govern work here
-- Constitution: the [canonical preferences.md Gist](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a); one real, Git-ignored workspace `../../gist/PREFERENCES.md`, not a Vexspoke file or symlink.
+- Constitution: the [canonical preferences.md Gist](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a); the one real, Git-ignored workspace `/PREFERENCES.md`, not a Vexspoke file or symlink.
 - Commits land in THIS repo root, one cohesive unit each; never push unless asked.
 - One public class per `.h`/`.c` pair, `(*ptr).field` (never `->`), dest-last
   params, `-Wall -Wextra -Werror`.
