@@ -43,4 +43,12 @@ Universal changes are published to the existing Gist and byte-verified; repo-loc
 documentation is committed locally under the Git Workflow Law. Never auto-push.
 R3 may borrow Vexspoke CPU computation/behavior or Relational Engine storage/native
 C search public contracts; staged migration does not change the default allocator.
-This grammar repository is a blueprint, not implemented engine integration.
+The initial lexer engine and explicit C23 adapter are implemented and locally
+tested. Immutable document snapshots, a caller-fed project/build-target model,
+and a validated snapshot-bound token stream, versioned project symbol/reference
+index and caller-fed dependency graph are also implemented. Filesystem discovery,
+parsing/AST, semantic resolution,
+automatic invalidation, compiler services, hot swapping and LSP integration
+remain a blueprint. Semicolon may consume these contracts, but
+retains ownership of project opening, filesystem browsing and editor
+presentation.
