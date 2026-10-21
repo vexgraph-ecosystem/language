@@ -15,11 +15,23 @@ borrowed/value-only; the adapter does not lex changed source text. Neither slice
 provides programming-language parsing, symbol resolution, project indexing, or
 LSP services.
 
+The first styling/analysis value layer now also exists: `BoundedText` provides
+returned, truncation-flagged projections; `TextStyle` carries inherited colors,
+bold/italic/dim/reverse/blink/hidden attributes and independently colored
+underline/squiggle/strike decorations; `StyleKeyRegistry` joins shared style
+keys and language-prefixed adapter keys through one bounded fallback; and
+`SyntaxRole`, `SyntaxSpan`, and `Diagnostic` provide language-neutral outputs
+for adapters and hosts. The C corpus at
+`../../tests/language/adapters/c/corpus.c` records the intended cases (`*` as
+multiply/dereference/declarator, macro object/function/generic claims,
+`;;` claims versus empty statements, and documentation comments), but no C
+lexer or parser consumes it yet.
+
 **Still a blueprint:** no grammar adapter, document store, syntax tree, semantic
 resolver, project index, LSP transport or hot-swappable grammar dylib exists.
 No runnable repository build target is registered yet.
 
-**Verification performed:** on Apple Silicon macOS, five owner tests compile
+**Verification performed:** on Apple Silicon macOS, eleven owner tests compile
 with GNU C23 and `-Wall -Wextra -Werror`, both normally and with ASan/UBSan.
 This is scoped object/diff-classifier evidence only, not platform/runtime
 integration proof.
@@ -69,8 +81,9 @@ R1/R4/R5 or `api-haven` headers; the allocator and IO remain R2 (Relational Engi
 
 **Known limits and gaps:** owner tests are strict C23 local tests, not yet an
 umbrella build target. Diff support only classifies unified Git patch line roles;
-there is no changed-code lexer integration, full patch model, syntax/semantic
-analysis, color theme/rendering, inlay hints, project-wide usages, LSP transport,
+there is no changed-code lexer integration, full patch model, C syntax parser,
+claim verifier, macro expansion engine, color-theme persistence, inlay-hint
+producer, project-wide usages, LSP transport,
 consumer integration, or non-macOS platform proof. Earlier blueprint docs still
 disagree on the grammar-module ABI (`Lang_*` vs `Grammar_*` vs `LangDriver`);
 these objects do not settle that dispute.
