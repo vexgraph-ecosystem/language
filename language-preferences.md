@@ -5,7 +5,7 @@
 ## 0. Constitution Link (supreme)
 - [preferences.md](https://gist.github.com/vex-graph/4132a6c45cb6d3797c3e8eff2e94035a) — real, Git-ignored workspace file at `../../gist/PREFERENCES.md`, not a tracked Vexspoke file or symlink.
 - All universal laws in `../../gist/PREFERENCES.md` are mandatory and binding across the ecosystem.
-- This document codifies **exclusive** preferences for `language` (R3 Language Grammars). Grammar/AST semantics remain R3; either Vexspoke computation/behavior or Relational Engine memory/storage/native C search public contracts may be borrowed from R2. This blueprint has no implemented engine integration; default allocator replacement and schema migration are not implied.
+- This document codifies **exclusive** preferences for `language` (R3 Language Grammars). Grammar/AST semantics remain R3; either Vexspoke computation/behavior or Relational Engine memory/storage/native C search public contracts may be borrowed from R2. The current slice includes a callback-based lexical coordinator with an explicit C23 adapter, immutable revisioned document snapshots, a validated snapshot-bound token stream, a caller-fed project/build-target model, a versioned project symbol/reference index, and a caller-fed dependency graph. Filesystem discovery, parsing/AST, semantic resolution, automatic invalidation, compiler services and LSP transport remain planned. Default allocator replacement and schema migration are not implied.
 
 ## 1. Repo-Local Law Index (Binding Matrix)
 
