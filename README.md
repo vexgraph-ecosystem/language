@@ -43,6 +43,14 @@ invalidation queries. `syntax/TokenStream` collects adapter spans into
 snapshot-bound shared tokens and rejects stale or malformed streams. These
 contracts do not perform filesystem discovery or parsing yet.
 
+Semicolon's first consumer is now a direct static C23Lexer link through its
+`src/editor/semicolon_syntax.{h,c}` bridge: copied editor rows produce live
+lexical colors and bold brackets in the terminal shell. The consumer owner is
+`../../../tests/semicolon/editor/run.py` (strict C23, C ASan/UBSan and scripted
+PTY scopes on macOS arm64). This does not integrate the generic registry/project
+engine, semantic classification, inlay hints, diagnostics or LSP; font appearance
+and physical-terminal approval remain unproved.
+
 **Still a blueprint:** project filesystem discovery, parser/AST, semantic
 resolver, C23 parser, compiler service, scheduler, LSP transport and
 hot-swappable grammar dylibs do not exist. The current C23 adapter is lexical
@@ -122,6 +130,6 @@ declarations and direct calls, omitting complex declarators, macros, function
 pointers and cross-file declarations. Diff support only classifies unified Git
 patch line roles; there is no changed-code lexer integration, full patch model,
 claim verifier, macro expansion engine, color-theme persistence, project-wide usages, LSP transport,
-consumer integration, or non-macOS platform proof. Earlier blueprint docs still
+full IDE integration, or non-macOS platform proof. Earlier blueprint docs still
 disagree on the grammar-module ABI (`Lang_*` vs `Grammar_*` vs `LangDriver`);
 these objects do not settle that dispute.
