@@ -26,7 +26,8 @@ borrowed-snapshot lexical span producer; `C23Highlights`, a conservative lexical
 presentation classifier that keeps keyword/literal/comment roles and refines
 identifier roles into type, function, variable, member and macro/constant from
 local spelling and neighboring tokens, with line-start preprocessor markers and
-directive names painted in the macro role; and `C23InlayHints`, a conservative
+directive names painted in the macro role and a well-formed `<...>` header name
+after `#include` emitted as one string-role span; and `C23InlayHints`, a conservative
 same-snapshot producer of parameter-name labels for simple direct calls. These
 emit syntax roles and virtual byte anchors only; colors and presentation remain
 consumer-owned. The C corpus at
@@ -54,9 +55,11 @@ Semicolon's first consumer is now a direct static C23 link through its
 `src/editor/semicolon_syntax.{h,c}` bridge: copied editor rows produce live
 lexical colors and bold brackets in the terminal shell, and the Language
 `C23Highlights` pass distinguishes types, functions, variables/members and
-macros/constants while keeping regular and documentation comments separate. The
-consumer owner is `../../../tests/semicolon/editor/run.py` (strict C23, C
-ASan/UBSan and scripted PTY scopes on macOS arm64). This does not integrate the
+macros/constants while keeping regular and documentation comments separate; an
+angle-bracket header path after `#include` is a string span, while ordinary
+`<`/`>` operators keep their operator role. The consumer owner is
+`../../../tests/semicolon/editor/run.py` (strict C23, C ASan/UBSan and scripted
+PTY scopes on macOS arm64). This does not integrate the
 generic registry/project engine, semantic classification, inlay hints,
 diagnostics or LSP; font appearance, ligature settings and physical-terminal
 approval remain unproved and host-owned.
