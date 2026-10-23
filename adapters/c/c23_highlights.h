@@ -17,8 +17,10 @@ typedef struct C23Highlights C23Highlights;
 // types; a name before "(" becomes a function; a name after "." or "->" becomes
 // a member; every other identifier becomes a variable. A line-start
 // preprocessor marker and its directive name (`#include`, `#define`, ...) join
-// the macro role, while `#`/`##` inside code stay punctuation. It is not a
-// parser, preprocessor or symbol resolver, and it never changes source bytes.
+// the macro role, while `#`/`##` inside code stay punctuation. After `#include`,
+// a well-formed `<...>` header name is emitted as one string-role span (a quoted
+// header already comes from the lexer as a string). It is not a parser,
+// preprocessor or symbol resolver, and it never changes source bytes.
 C23Highlights *C23Highlights_0(void);
 C23Highlights *C23Highlights_3(uint32_t documentId, const char *source, size_t length);
 #define C23Highlights_1 C23Highlights_invalid_arity

@@ -17,9 +17,13 @@
  * also honest about that limit, so a capitalized variable can read as a type and
  * an all-caps local can read as a macro. Preprocessor directives at the start of
  * a line (`#include`, `#define`, `#pragma`, ...) keep their marker and name in
- * the macro role, matching the way macros are painted. It never rewrites bytes,
- * allocates on queries, or decides diagnostics. This is presentation
- * classification, not semantic resolution, and the consumer owns colors.
+ * the macro role, matching the way macros are painted. After `#include`, a
+ * well-formed angle-bracket header name (`<locale.h>`) is one string-role span
+ * so the consumer paints the path with its string pen; a quoted header already
+ * arrives as a string token. The path is deliberately recognized only there, not
+ * every `<`/`>` comparison in the file. It never rewrites bytes, allocates on
+ * queries, or decides diagnostics. This is presentation classification, not
+ * semantic resolution, and the consumer owns colors.
  */
 
 ;;OVERVIEW
@@ -50,7 +54,8 @@
  *   projections:  C23Highlights_toString, C23Highlights_toStringStruct
  *   private:      tokenize, appendEntry, previousSignificant,
  *                 nextSignificant, tokenIs, tokenStartsLine,
- *                 previousIsDirectiveHash, identifierAllCaps,
+ *                 previousIsDirectiveHash, containsNewline, includeHeaderEnd,
+ *                 identifierAllCaps,
  *                 identifierEndsTypeSuffix, identifierStartsUpper,
  *                 identifierHasLower, classifyIdentifier
  *
@@ -62,7 +67,9 @@
  *   and may allocate. No parser, preprocessor, symbol resolution or diagnostics
  *   are claimed; comments and doc comments keep their distinct lexer roles.
  *   A line-start preprocessor marker and its directive name are painted as
- *   macros; a `#` or `##` inside code stays punctuation.
+ *   macros; a `#` or `##` inside code stays punctuation. A well-formed
+ *   `<...>` header name after `#include` is one string span, while a quoted
+ *   header keeps the lexer's string role.
  * ============================================================================
  */
 
@@ -199,6 +206,37 @@ static size_t nextSignificant(const C23Token *tokens, size_t count, size_t index
     return SIZE_MAX;
 }
 
+static bool containsNewline(const char *source, size_t start, size_t end) {
+    for (size_t at = start; at < end; ++at) {
+        if (source[at] == '\n' || source[at] == '\r')
+            return true;
+    }
+    return false;
+}
+
+// A header-name after #include is one lexical unit even though the token stream
+// splits <locale.h> into punctuation and identifiers. Return the closing '>'
+// index and the opening '<' index only when the whole name stays on one line.
+static size_t includeHeaderEnd(const C23Token *tokens, size_t count, size_t includeIndex,
+                               const char *source, size_t *openIndex) {
+    size_t open = includeIndex + 1u;
+    if (open >= count || !tokenIs(tokens, count, open, "<", source))
+        return SIZE_MAX;
+    if (containsNewline(source, tokens[includeIndex].end, tokens[open].start))
+        return SIZE_MAX;
+    size_t previousEnd = tokens[open].end;
+    for (size_t index = open + 1u; index < count; ++index) {
+        if (containsNewline(source, previousEnd, tokens[index].start))
+            return SIZE_MAX;
+        if (tokenIs(tokens, count, index, ">", source)) {
+            *openIndex = open;
+            return index;
+        }
+        previousEnd = tokens[index].end;
+    }
+    return SIZE_MAX;
+}
+
 static bool identifierAllCaps(const char *source, C23Token token) {
     bool letter = false;
     for (size_t at = token.start; at < token.end; ++at) {
@@ -295,8 +333,28 @@ C23Highlights *C23Highlights_3(uint32_t documentId, const char *source, size_t l
         C23HighlightEntry entry = {
             .start = token.start, .end = token.end, .role = role
         };
-        if (!appendEntry(self, entry))
+        if (!appendEntry(self, entry)) {
             success = false;
+            break;
+        }
+        if (token.role == SYNTAX_ROLE_IDENTIFIER
+            && tokenIs(tokens, tokenCount, index, "include", (*self).source)
+            && previousIsDirectiveHash(tokens, tokenCount, index, (*self).source)) {
+            size_t open = SIZE_MAX;
+            size_t close = includeHeaderEnd(tokens, tokenCount, index, (*self).source, &open);
+            if (close != SIZE_MAX) {
+                C23HighlightEntry header = {
+                    .start = tokens[open].start,
+                    .end = tokens[close].end,
+                    .role = SYNTAX_ROLE_STRING
+                };
+                if (!appendEntry(self, header)) {
+                    success = false;
+                    break;
+                }
+                index = close;
+            }
+        }
     }
     free(tokens);
     if (!success) {
