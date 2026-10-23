@@ -22,7 +22,11 @@ underline/squiggle/strike decorations; `StyleKeyRegistry` joins shared style
 keys and language-prefixed adapter keys through one bounded fallback; and
 `SyntaxRole`, `SyntaxSpan`, and `Diagnostic` provide language-neutral outputs
 for adapters and hosts. The initial C23 adapter now includes `C23Lexer`, a
-borrowed-snapshot lexical span producer, and `C23InlayHints`, a conservative
+borrowed-snapshot lexical span producer; `C23Highlights`, a conservative lexical
+presentation classifier that keeps keyword/literal/comment roles and refines
+identifier roles into type, function, variable, member and macro/constant from
+local spelling and neighboring tokens, with line-start preprocessor markers and
+directive names painted in the macro role; and `C23InlayHints`, a conservative
 same-snapshot producer of parameter-name labels for simple direct calls. These
 emit syntax roles and virtual byte anchors only; colors and presentation remain
 consumer-owned. The C corpus at
@@ -30,6 +34,9 @@ consumer-owned. The C corpus at
 multiply/dereference/declarator, macro object/function/generic claims,
 `;;` claims versus empty statements, and documentation comments); the C lexer
 has a strict/annotation-profile lexical subset but is not a parser or preprocessor.
+`C23Highlights` is not semantic resolution: it does not expand macros, resolve
+declarations, parse, or distinguish parameters from local variables beyond the
+current variable role.
 
 **New engine slice:** `lang/` provides a callback adapter contract, explicit-id
 registry and host-facing lexer engine. `adapters/c23/` registers the existing
@@ -43,13 +50,16 @@ invalidation queries. `syntax/TokenStream` collects adapter spans into
 snapshot-bound shared tokens and rejects stale or malformed streams. These
 contracts do not perform filesystem discovery or parsing yet.
 
-Semicolon's first consumer is now a direct static C23Lexer link through its
+Semicolon's first consumer is now a direct static C23 link through its
 `src/editor/semicolon_syntax.{h,c}` bridge: copied editor rows produce live
-lexical colors and bold brackets in the terminal shell. The consumer owner is
-`../../../tests/semicolon/editor/run.py` (strict C23, C ASan/UBSan and scripted
-PTY scopes on macOS arm64). This does not integrate the generic registry/project
-engine, semantic classification, inlay hints, diagnostics or LSP; font appearance
-and physical-terminal approval remain unproved.
+lexical colors and bold brackets in the terminal shell, and the Language
+`C23Highlights` pass distinguishes types, functions, variables/members and
+macros/constants while keeping regular and documentation comments separate. The
+consumer owner is `../../../tests/semicolon/editor/run.py` (strict C23, C
+ASan/UBSan and scripted PTY scopes on macOS arm64). This does not integrate the
+generic registry/project engine, semantic classification, inlay hints,
+diagnostics or LSP; font appearance, ligature settings and physical-terminal
+approval remain unproved and host-owned.
 
 **Still a blueprint:** project filesystem discovery, parser/AST, semantic
 resolver, C23 parser, compiler service, scheduler, LSP transport and
@@ -99,7 +109,7 @@ compatibility or automatic schema migration is assumed. GPU dispatch stays R3.
 - `index`: staged per-file analysis contributions, project-level symbol and
   reference queries, and caller-fed dependency-edge invalidation queries.
 - `adapters/c23`: explicit C23 language-id bridge to the strict C23 lexer.
-- `adapters/c`: C23 lexical/value implementation and conservative inlay hints.
+- `adapters/c`: C23 lexical/value implementation, conservative highlight roles and inlay hints.
 - `adapters/<language>/`: future language frontends; `adapters/diff` contains
   the unified-diff line classifier.
 - `../../../tests/language`: mirrored owner tests and `run.py`; checklist evidence is
@@ -125,7 +135,9 @@ umbrella build target. The project model and index are data contracts; there is
 no filesystem scanner, parser, semantic resolver or automatic invalidation
 scheduler; dependency edges must currently be supplied by an analysis host.
 The C23 lexer is a lexical subset, not a parser,
-preprocessor or semantic resolver; inlay hints cover only simple same-snapshot
+preprocessor or semantic resolver; `C23Highlights` classifies identifiers from
+local spelling and neighboring tokens, so it is presentation only and does not
+resolve symbols or prove a role; inlay hints cover only simple same-snapshot
 declarations and direct calls, omitting complex declarators, macros, function
 pointers and cross-file declarations. Diff support only classifies unified Git
 patch line roles; there is no changed-code lexer integration, full patch model,
