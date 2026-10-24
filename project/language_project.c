@@ -116,11 +116,11 @@ const ProjectFile *LanguageProject_addFile(LanguageProject *self,
     }
     if ((*self).fileCount == (*self).fileCapacity) {
         size_t capacity = (*self).fileCapacity == 0u ? 8u : (*self).fileCapacity * 2u;
-        if (capacity < (*self).fileCapacity || capacity > SIZE_MAX / sizeof(ProjectFile *)) {
+        if (capacity < (*self).fileCapacity || capacity > SIZE_MAX / sizeof(ProjectFile*)) {
             THROW("LanguageProject: file table capacity overflow");
             return nullptr;
         }
-        ProjectFile **grown = realloc((*self).files, capacity * sizeof(ProjectFile *));
+        ProjectFile **grown = realloc((*self).files, capacity * sizeof(ProjectFile*));
         if (grown == nullptr) {
             THROW("LanguageProject: allocation failed for %zu file records", capacity);
             return nullptr;
@@ -163,11 +163,11 @@ BuildTarget *LanguageProject_addTarget(LanguageProject *self, const char *name,
     }
     if ((*self).targetCount == (*self).targetCapacity) {
         size_t capacity = (*self).targetCapacity == 0u ? 4u : (*self).targetCapacity * 2u;
-        if (capacity < (*self).targetCapacity || capacity > SIZE_MAX / sizeof(BuildTarget *)) {
+        if (capacity < (*self).targetCapacity || capacity > SIZE_MAX / sizeof(BuildTarget*)) {
             THROW("LanguageProject: target table capacity overflow");
             return nullptr;
         }
-        BuildTarget **grown = realloc((*self).targets, capacity * sizeof(BuildTarget *));
+        BuildTarget **grown = realloc((*self).targets, capacity * sizeof(BuildTarget*));
         if (grown == nullptr) {
             THROW("LanguageProject: allocation failed for %zu build targets", capacity);
             return nullptr;

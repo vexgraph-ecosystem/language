@@ -55,7 +55,7 @@ bool LanguageRegistry_register(LanguageRegistry *self, const LanguageAdapter *ad
     }
     if ((*self).count == (*self).capacity) {
         size_t capacity = (*self).capacity == 0u ? 4u : (*self).capacity * 2u;
-        if (capacity < (*self).capacity || capacity > SIZE_MAX / sizeof(LanguageAdapter *)) {
+        if (capacity < (*self).capacity || capacity > SIZE_MAX / sizeof(LanguageAdapter*)) {
             if ((*self).exhaustionCount != UINT64_MAX)
                 ++(*self).exhaustionCount;
             if (!(*self).exhaustionReported) {
@@ -66,7 +66,7 @@ bool LanguageRegistry_register(LanguageRegistry *self, const LanguageAdapter *ad
             return false;
         }
         const LanguageAdapter **grown = realloc((*self).adapters,
-                                                 capacity * sizeof(LanguageAdapter *));
+                                                 capacity * sizeof(LanguageAdapter*));
         if (grown == nullptr) {
             if ((*self).exhaustionCount != UINT64_MAX)
                 ++(*self).exhaustionCount;

@@ -134,12 +134,12 @@ bool ProjectIndex_publish(ProjectIndex *self, const FileAnalysis *analysis) {
     }
     if ((*self).analysisCount == (*self).analysisCapacity) {
         size_t capacity = (*self).analysisCapacity == 0u ? 8u : (*self).analysisCapacity * 2u;
-        if (capacity < (*self).analysisCapacity || capacity > SIZE_MAX / sizeof(FileAnalysis *)) {
+        if (capacity < (*self).analysisCapacity || capacity > SIZE_MAX / sizeof(FileAnalysis*)) {
             THROW("ProjectIndex: contribution table capacity overflow");
             FileAnalysis_free(copy);
             return false;
         }
-        FileAnalysis **grown = realloc((*self).analyses, capacity * sizeof(FileAnalysis *));
+        FileAnalysis **grown = realloc((*self).analyses, capacity * sizeof(FileAnalysis*));
         if (grown == nullptr) {
             THROW("ProjectIndex: allocation failed for %zu contributions", capacity);
             FileAnalysis_free(copy);

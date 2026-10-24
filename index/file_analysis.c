@@ -81,7 +81,7 @@ void FileAnalysis_free(FileAnalysis *self) {
     if (self == nullptr)
         return;
     for (size_t index = 0u; index < (*self).symbolCount; ++index)
-        free((void *) (*self).symbols[index].name);
+        free((void*) (*self).symbols[index].name);
     free((*self).symbols);
     (*self).symbols = nullptr;
     free((*self).references);

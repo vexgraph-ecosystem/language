@@ -145,11 +145,11 @@ bool BuildTarget_addCompilerOption(BuildTarget *self, const char *option) {
     size_t capacity = (*self).compilerOptionCapacity;
     if ((*self).compilerOptionCount == capacity) {
         size_t next = capacity == 0u ? 8u : capacity * 2u;
-        if (next < capacity || next > SIZE_MAX / sizeof(char *)) {
+        if (next < capacity || next > SIZE_MAX / sizeof(char*)) {
             THROW("BuildTarget: compiler-option capacity overflow");
             return false;
         }
-        char **grown = realloc((*self).compilerOptions, next * sizeof(char *));
+        char **grown = realloc((*self).compilerOptions, next * sizeof(char*));
         if (grown == nullptr) {
             THROW("BuildTarget: allocation failed for %zu compiler options", next);
             return false;

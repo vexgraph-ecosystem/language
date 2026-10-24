@@ -141,13 +141,13 @@ StyleKeyIssue StyleKeyRegistry_check(const StyleKeyRegistry *self) {
     if ((*self).adapterCount > 0u && (*self).adapterEntries == nullptr) return STYLE_KEY_ISSUE_ENTRY_NULL;
     for (size_t i = 0u; i < (*self).adapterCount; ++i) {
         const StyleKeyEntry *entry = &(*self).adapterEntries[i];
-        if (entry->name == nullptr || entry->name[0] == '\0') return STYLE_KEY_ISSUE_NAME_EMPTY;
-        if (!validPrefix(entry->name)) return STYLE_KEY_ISSUE_PREFIX_INVALID;
-        if (StyleKeyRegistry_isCore(self, entry->name)) return STYLE_KEY_ISSUE_COLLIDES_CORE;
-        if (entry->fallback == nullptr || entry->fallback[0] == '\0') return STYLE_KEY_ISSUE_FALLBACK_EMPTY;
-        if (!StyleKeyRegistry_isCore(self, entry->fallback)) return STYLE_KEY_ISSUE_FALLBACK_NOT_CORE;
+        if ((*entry).name == nullptr || (*entry).name[0] == '\0') return STYLE_KEY_ISSUE_NAME_EMPTY;
+        if (!validPrefix((*entry).name)) return STYLE_KEY_ISSUE_PREFIX_INVALID;
+        if (StyleKeyRegistry_isCore(self, (*entry).name)) return STYLE_KEY_ISSUE_COLLIDES_CORE;
+        if ((*entry).fallback == nullptr || (*entry).fallback[0] == '\0') return STYLE_KEY_ISSUE_FALLBACK_EMPTY;
+        if (!StyleKeyRegistry_isCore(self, (*entry).fallback)) return STYLE_KEY_ISSUE_FALLBACK_NOT_CORE;
         for (size_t j = 0u; j < i; ++j)
-            if (equal(entry->name, (*self).adapterEntries[j].name)) return STYLE_KEY_ISSUE_DUPLICATE;
+            if (equal((*entry).name, (*self).adapterEntries[j].name)) return STYLE_KEY_ISSUE_DUPLICATE;
     }
     return STYLE_KEY_ISSUE_NONE;
 }
